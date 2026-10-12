@@ -2,35 +2,36 @@ name: Deploy pagina estatica en pages
 
 on: 
   push:
-    branches:["main"]
+    branches: ["main"]
   workflow_dispatch:
 
-permission:
+permissions:
   contents: read
   pages: write
   id-token: write
-concurrency:  
+
+concurrency: 
   group: "pages"
-  cancel-in-progress:true
+  cancel-in-progress: true
+
 jobs:
   deploy:
-      environment:
-          name: github-pages
-          url: ${{steps.deployment.outputs.page_url}}
-        runs-on: ubuntu-latest
-        steps:
-          - name: Checkout
-            uses: actions/checkout@v6
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-          - name: Setup Pages
-           uses: actions/configure-pages@v5
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
 
-          - name: Carga artifact
-            uses: actions/upload-pages-artifact@v4
+      - name: Carga artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: '.'
 
-            with:
-              path: '.'
-
-          - name: Desplegar en Github Pages
-            id: deployment
-            uses: actions/deploy-pages@v4
+      - name: Desplegar en Github Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
